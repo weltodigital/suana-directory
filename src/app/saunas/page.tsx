@@ -271,7 +271,7 @@ export default async function SaunasPage() {
                     )}
 
                     <Link
-                      href={`/sauna/${createUniqueSlug(sauna, allSaunas)}`}
+                      href={`/sauna/${createUniqueSlug(sauna, allSaunas || [])}`}
                       className="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center"
                     >
                       <ArrowRight size={16} className="mr-2" />

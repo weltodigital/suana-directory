@@ -18,7 +18,7 @@ import {
   Wifi,
   Car,
   Coffee,
-  Shower,
+  Droplets,
   Heart
 } from 'lucide-react'
 import SchemaMarkup from '@/components/SchemaMarkup'
@@ -485,7 +485,7 @@ export default async function SaunaPage({ params }: { params: { slug: string } }
                   address: sauna.address,
                   city: sauna.city,
                   rating: sauna.rating,
-                  website: sauna.website
+                  website: sauna.website || undefined
                 }]}
                 center={[sauna.latitude, sauna.longitude]}
                 zoom={15}
