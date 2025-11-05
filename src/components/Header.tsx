@@ -1,121 +1,54 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
+import { useState } from 'react'
+import { Menu, X, MapPin, Phone, Mail } from 'lucide-react'
 
-interface Breadcrumb {
-  label: string;
-  href?: string;
-}
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-interface HeaderProps {
-  breadcrumbs?: Breadcrumb[];
-}
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
 
-export default function Header({ breadcrumbs }: HeaderProps = {}) {
   return (
-    <nav style={{
-      backgroundColor: '#ffffff',
-      borderBottom: '1px solid #e5e7eb',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '1rem'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem'
-          }}>
-            <Link href="/" style={{
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none'
-            }}>
-              <Image
-                src="/Pilates Classes Near.png"
-                alt="Pilates Classes Near"
-                width={200}
-                height={60}
-                style={{ height: '3rem', width: 'auto' }}
-                priority
-              />
-            </Link>
-          </div>
-
-          <Link
-            href="/#browse-counties"
-            className="browse-locations-btn"
-            style={{
-              backgroundColor: '#9333ea',
-              color: '#ffffff',
-              padding: '0.5rem 1rem',
-              borderRadius: '0.375rem',
-              textDecoration: 'none',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              transition: 'background-color 0.2s ease'
-            }}
-          >
-            Browse Locations
+    <header className="bg-white shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-gradient-to-r from-sauna-600 to-cold-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">SC</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gray-900">Sauna & Cold</span>
+            </div>
           </Link>
+
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link href="/saunas" className="text-gray-700 hover:text-sauna-600 font-medium transition-colors">
+              Saunas
+            </Link>
+          </nav>
+
+          <button
+            onClick={toggleMenu}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
-        {/* Breadcrumbs */}
-        {breadcrumbs && breadcrumbs.length > 0 && (
-          <div style={{
-            borderTop: '1px solid #f1f5f9',
-            paddingTop: '0.75rem',
-            marginTop: '1rem'
-          }}>
-            <nav style={{
-              fontSize: '0.875rem',
-              color: '#6b7280'
-            }}>
-              <ol style={{
-                display: 'flex',
-                gap: '0.5rem',
-                listStyle: 'none',
-                margin: 0,
-                padding: 0
-              }}>
-                {breadcrumbs.map((breadcrumb, index) => (
-                  <li key={index} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    {index > 0 && (
-                      <span style={{ color: '#d1d5db' }}>/</span>
-                    )}
-                    {breadcrumb.href ? (
-                      <Link href={breadcrumb.href} style={{
-                        color: '#9333ea',
-                        textDecoration: 'none'
-                      }}>
-                        {breadcrumb.label}
-                      </Link>
-                    ) : (
-                      <span style={{ color: '#1f2937' }}>
-                        {breadcrumb.label}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ol>
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-gray-200">
+            <nav className="flex flex-col space-y-3">
+              <Link href="/saunas" className="text-gray-700 hover:text-sauna-600 font-medium py-2 transition-colors">
+                Saunas
+              </Link>
             </nav>
           </div>
         )}
       </div>
-    </nav>
+    </header>
   )
 }

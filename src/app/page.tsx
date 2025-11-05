@@ -1,369 +1,178 @@
-import React from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { MapPin, Star, Phone, Clock, Activity } from 'lucide-react'
-import { createClient } from '@/lib/supabase'
-import SEOSchemaMarkup from '@/components/SEOSchemaMarkup'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import { MapPin, Star, Users, Clock, Thermometer, Snowflake, Heart, Award, Shield, TrendingUp } from 'lucide-react'
+import SchemaMarkup from '@/components/SchemaMarkup'
 
-interface County {
-  id: string;
-  name: string;
-  slug: string;
-  butcher_count: number; // Keep same name for compatibility with existing views
-}
-
-interface CityTown {
-  id: string;
-  name: string;
-  slug: string;
-  full_path: string;
-  county_slug: string;
-  butcher_count: number; // Keep same name for compatibility with existing views
-  type: 'city' | 'town';
-}
-
-interface CountyWithLocations {
-  county: County;
-  locations: CityTown[];
-}
-
-interface PilatesStudio {
-  id: string;
-  name: string;
-  slug?: string;
-  description: string;
-  address: string;
-  postcode: string;
-  city: string;
-  county: string;
-  phone?: string;
-  email?: string;
-  website?: string;
-  instagram?: string;
-  facebook?: string;
-  latitude?: number;
-  longitude?: number;
-  rating?: number;
-  review_count: number;
-  specialties: string[];
-  opening_hours: Record<string, string>;
-  images: string[];
-  class_types: string[];
-  instructor_names: string[];
-  price_range?: string;
-  membership_options: Record<string, any>;
-  equipment_available: string[];
-  accessibility_features: string[];
-  parking_available: boolean;
-  online_booking_available: boolean;
-  beginner_friendly: boolean;
-  is_verified: boolean;
-  is_active: boolean;
-  google_place_id?: string;
-  google_rating?: number;
-  google_review_count: number;
-  last_scraped_at?: string;
-  created_at: string;
-  updated_at: string;
-  county_slug: string;
-  city_slug: string;
-  full_url_path: string;
-}
-
-async function getCountiesWithLocations(): Promise<CountyWithLocations[]> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zytpgaraxyhlsvvkrrir.supabase.co',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5dHBnYXJheHlobHN2dmtycmlyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODc5ODMxMiwiZXhwIjoyMDc0Mzc0MzEyfQ.XLBFI-CGJXMi3yrLsb7FP2DOXRJy-IDDIwSWt7W95Ok'
-  );
-
-  // Get all counties
-  const { data: counties, error: countiesError } = await supabase
-    .from('public_locations')
-    .select('id, name, slug, butcher_count')
-    .eq('type', 'county')
-    .order('name');
-
-  if (countiesError) {
-    console.error('Error fetching counties:', countiesError);
-    return [];
-  }
-
-  // Get all cities and towns
-  const { data: citiesAndTowns, error: locationsError } = await supabase
-    .from('public_locations')
-    .select('id, name, slug, full_path, county_slug, butcher_count, type')
-    .in('type', ['city', 'town'])
-    .order('name');
-
-  if (locationsError) {
-    console.error('Error fetching cities and towns:', locationsError);
-    return [];
-  }
-
-  // Group locations by county
-  return counties.map(county => ({
-    county,
-    locations: citiesAndTowns.filter(location => location.county_slug === county.slug)
-  }));
-}
-
-async function getFeaturedPilatesStudios(limit: number = 6): Promise<PilatesStudio[]> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zytpgaraxyhlsvvkrrir.supabase.co',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5dHBnYXJheHlobHN2dmtycmlyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODc5ODMxMiwiZXhwIjoyMDc0Mzc0MzEyfQ.XLBFI-CGJXMi3yrLsb7FP2DOXRJy-IDDIwSWt7W95Ok'
-  );
-
-  const { data: studios, error } = await supabase
-    .from('pilates_studios')
-    .select('*')
-    .eq('is_active', true)
-    .not('google_rating', 'is', null)
-    .not('full_url_path', 'is', null)
-    .not('county_slug', 'is', null)
-    .not('city_slug', 'is', null)
-    .gte('google_rating', 4.0)
-    .order('google_rating', { ascending: false })
-    .limit(limit * 2);
-
-  if (error) {
-    console.error('Error fetching featured studios:', error);
-    return [];
-  }
-
-  // Filter studios to ensure they have complete URL information
-  const validStudios = (studios || []).filter(studio => {
-    return studio.full_url_path ||
-           (studio.county_slug && studio.city_slug && (studio.slug || studio.id));
-  }).slice(0, limit);
-
-  return validStudios;
-}
-
-export default async function Home() {
-  // Get counties with their associated locations and featured studios
-  const [countiesWithLocations, featuredStudios] = await Promise.all([
-    getCountiesWithLocations(),
-    getFeaturedPilatesStudios(6)
-  ]);
-
-  // Debug logging to see what we're getting
-  console.log('Counties with locations:', countiesWithLocations.length);
-  console.log('Featured studios:', featuredStudios.length);
-  if (countiesWithLocations.length > 0) {
-    console.log('First county:', countiesWithLocations[0].county);
-    console.log('First county locations:', countiesWithLocations[0].locations.length);
-  }
-
+export default function HomePage() {
   return (
-    <div>
-      <Header />
-      <SEOSchemaMarkup page="home" />
-      <div className="hero-gradient">
-        <div className="container" style={{textAlign: 'center', padding: '2rem'}}>
-          <h1 className="hero-title">
-            Find the Perfect Pilates Studio Near You
-          </h1>
-          <p className="hero-subtitle">
-            Discover the best pilates studios across the UK with detailed class information, instructor profiles, and live booking
-          </p>
+    <>
+      <SchemaMarkup type="website" />
+      <SchemaMarkup type="organization" />
+      <SchemaMarkup type="localbusiness" />
 
-          <div style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
-            <Link href="#browse-counties" className="btn">Browse All Locations</Link>
-            <Link href="#featured-studios" className="btn" style={{backgroundColor: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.3)'}}>View Featured Studios</Link>
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-pink-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Find Premium
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sauna-600 to-cold-600"> Saunas</span>,
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cold-600 to-sauna-600"> Cold Plunge</span> &
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sauna-600 to-cold-600"> Ice Baths</span> in the UK
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              Discover the UK's most comprehensive directory of heat and cold therapy facilities.
+              From traditional Finnish saunas to cutting-edge cryotherapy centres across England, Scotland, and Wales.
+            </p>
+
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-3xl mx-auto">
+              <div>
+                <div className="text-3xl font-bold text-sauna-600">500+</div>
+                <div className="text-gray-600">Sauna Facilities</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-sauna-600">50+</div>
+                <div className="text-gray-600">UK Cities</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-sauna-600">100%</div>
+                <div className="text-gray-600">Free to Use</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="container mx-auto px-4 py-20">
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Discover UK Saunas
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Find traditional Finnish saunas, infrared saunas, steam rooms, and hot therapy facilities across the UK.
+            </p>
+          </div>
 
-        {/* Featured Studios */}
-        <div id="featured-studios" className="mb-20">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-12 text-center font-jakarta mt-8">
-            Featured Pilates Studios
-          </h2>
-          {featuredStudios.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredStudios.map((studio) => (
-                <Card key={studio.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-xl">{studio.name}</CardTitle>
-                        <CardDescription className="flex items-center gap-1 mt-1">
-                          <MapPin className="h-4 w-4" />
-                          {studio.city}, {studio.county}
-                        </CardDescription>
-                      </div>
-                      {studio.google_rating && (
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm font-medium">{studio.google_rating.toFixed(1)}</span>
-                        </div>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {/* Opening Hours */}
-                      {studio.opening_hours && Object.keys(studio.opening_hours).length > 0 && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                          <Clock className="h-4 w-4" />
-                          <span>{Object.values(studio.opening_hours)[0] || 'Opening hours available'}</span>
-                        </div>
-                      )}
-
-                      {/* Phone */}
-                      {studio.phone && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                          <Phone className="h-4 w-4" />
-                          <span>{studio.phone}</span>
-                        </div>
-                      )}
-
-                      {/* Price Range */}
-                      {studio.price_range && (
-                        <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                          <Activity className="h-4 w-4" />
-                          <span>{studio.price_range}</span>
-                        </div>
-                      )}
-
-                      {/* Description */}
-                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
-                        {studio.description || `Professional pilates studio in ${studio.city}, ${studio.county} offering expert instruction and quality equipment.`}
-                      </p>
-
-                      {/* Class Types */}
-                      {studio.class_types && studio.class_types.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {studio.class_types.slice(0, 3).map((classType, index) => (
-                            <span key={index} className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-xs rounded-full">
-                              {classType}
-                            </span>
-                          ))}
-                          {studio.class_types.length > 3 && (
-                            <span className="text-xs text-purple-600 px-2 py-1">
-                              +{studio.class_types.length - 3} more
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-2 pt-2">
-                        {studio.website ? (
-                          <Button size="sm" className="flex-1 bg-purple-600 hover:bg-purple-700" asChild>
-                            <a href={studio.website} target="_blank" rel="nofollow noopener noreferrer">
-                              Visit Website
-                            </a>
-                          </Button>
-                        ) : studio.phone ? (
-                          <Button size="sm" className="flex-1 bg-purple-600 hover:bg-purple-700" asChild>
-                            <a href={`tel:${studio.phone}`}>
-                              Call Studio
-                            </a>
-                          </Button>
-                        ) : (
-                          <Button size="sm" className="flex-1 bg-purple-600 hover:bg-purple-700" asChild>
-                            <Link href={`/${studio.full_url_path || `${studio.county_slug}/${studio.city_slug}/${studio.slug || studio.id}`}`}>
-                              View Details
-                            </Link>
-                          </Button>
-                        )}
-
-                        {(studio.full_url_path || studio.county_slug) && (
-                          <Button variant="outline" size="sm" asChild>
-                            <Link href={`/${studio.full_url_path || `${studio.county_slug}/${studio.city_slug}/${studio.slug || studio.id}`}`}>
-                              Details
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-slate-600 dark:text-slate-400 text-lg">
-                No featured studios available at the moment.
+          <div className="flex justify-center">
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 group max-w-md">
+              <div className="w-16 h-16 bg-gradient-to-r from-sauna-500 to-sauna-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Thermometer className="text-white" size={28} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Saunas</h3>
+              <p className="text-gray-600 mb-6">
+                Traditional Finnish saunas, infrared saunas, steam rooms, and hot therapy facilities across the UK.
               </p>
+              <Link href="/saunas" className="text-sauna-600 font-semibold hover:text-sauna-700 transition-colors">
+                Explore Saunas →
+              </Link>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* All Locations by County Section */}
-        <div id="browse-counties" className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8 text-center font-jakarta">
-            Browse All Locations by County
-          </h2>
-          {countiesWithLocations.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {countiesWithLocations.map(({ county, locations }) => (
-                <div key={county.id} className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">
-                    <Link
-                      href={`/${county.slug}`}
-                      className="hover:text-purple-600 transition-colors"
-                    >
-                      {county.name}
-                    </Link>
-                  </h3>
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Popular Sauna Locations
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover sauna facilities in major UK cities and regions.
+            </p>
+          </div>
 
-                  {locations.length > 0 ? (
-                    <div className="space-y-2">
-                      {locations.map((location) => (
-                        <div key={location.id}>
-                          <Link
-                            href={`/${location.full_path}`}
-                            className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm transition-colors inline-block"
-                          >
-                            {location.name}
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-slate-500 dark:text-slate-400 text-sm italic">
-                      No cities or towns listed yet
-                    </p>
-                  )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { city: 'London', count: '7+ saunas', countySlug: 'greater-london' },
+              { city: 'Manchester', count: '12+ saunas', countySlug: 'greater-manchester' },
+              { city: 'Birmingham', count: '5+ saunas', countySlug: 'west-midlands' },
+              { city: 'Edinburgh', count: '4+ saunas', countySlug: 'city-of-edinburgh' },
+              { city: 'Bristol', count: '9+ saunas', countySlug: 'bristol' },
+              { city: 'Leeds', count: '7+ saunas', countySlug: 'west-yorkshire' },
+              { city: 'Glasgow', count: '16+ saunas', countySlug: 'glasgow-city' },
+              { city: 'Liverpool', count: '4+ saunas', countySlug: 'lancashire' },
+            ].map((location) => (
+              <Link
+                key={location.city}
+                href={`/saunas/${location.countySlug}`}
+                className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
+              >
+                <div className="h-48 bg-gradient-to-br from-blue-200 to-purple-200 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition-all duration-300"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-xl font-bold">{location.city}</h3>
+                    <p className="text-sm opacity-90">{location.count}</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-slate-600 dark:text-slate-400 text-lg">
-                No locations available at the moment.
-              </p>
-            </div>
-          )}
-        </div>
-
-
-        {/* CTA Section */}
-        <div className="text-center bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-12 text-white">
-          <h2 className="text-3xl font-bold mb-4 font-jakarta">Ready to Transform Your Fitness Journey?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of people who trust Pilates Classes Near to find their perfect pilates studio and instructor
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-3" asChild>
-              <Link href="#browse-counties">Find Studios Near You</Link>
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-3 bg-white text-gray-900 border-white hover:bg-gray-100 hover:text-gray-900" asChild>
-              <Link href="#featured-studios">Explore Featured Studios</Link>
-            </Button>
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
-      <Footer />
-    </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Why Choose Sauna & Cold Directory UK?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              The UK's most trusted and comprehensive wellness facility directory.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="text-white" size={32} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Quality Facilities</h3>
+              <p className="text-gray-600">
+                All our listed facilities are carefully curated and regularly updated to ensure accuracy and quality.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="text-white" size={32} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Trusted Reviews</h3>
+              <p className="text-gray-600">
+                Read authentic reviews from real users to make informed decisions about your wellness journey.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <TrendingUp className="text-white" size={32} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Growing Network</h3>
+              <p className="text-gray-600">
+                Constantly expanding our network to include the latest and best heat and cold therapy facilities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gradient-to-r from-sauna-600 to-cold-600">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Ready to Start Your Wellness Journey?
+          </h2>
+          <p className="text-xl text-white mb-8 max-w-2xl mx-auto opacity-90">
+            Join thousands of wellness enthusiasts discovering the benefits of heat and cold therapy across the UK.
+          </p>
+          <div className="flex justify-center">
+            <Link
+              href="/saunas"
+              className="bg-white text-gray-900 px-8 py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 font-semibold text-lg"
+            >
+              Browse All Facilities
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }

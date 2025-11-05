@@ -1,164 +1,56 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { createClient } from '@/lib/supabase'
 
-interface County {
-  id: string;
-  name: string;
-  slug: string;
-  butcher_count: number;
-}
-
-async function getFeaturedCounties(): Promise<County[]> {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zytpgaraxyhlsvvkrrir.supabase.co',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5dHBnYXJheHlobHN2dmtycmlyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODc5ODMxMiwiZXhwIjoyMDc0Mzc0MzEyfQ.XLBFI-CGJXMi3yrLsb7FP2DOXRJy-IDDIwSWt7W95Ok'
-  );
-
-  const { data, error } = await supabase
-    .from('public_locations')
-    .select('id, name, slug, butcher_count')
-    .eq('type', 'county')
-    .gt('butcher_count', 0)
-    .order('butcher_count', { ascending: false })
-    .limit(8);
-
-  if (error) {
-    console.error('Error fetching counties:', error);
-    return [];
-  }
-
-  return data || [];
-}
-
-export default async function Footer() {
-  const counties = await getFeaturedCounties();
+export default function Footer() {
+  const currentYear = new Date().getFullYear()
 
   return (
-    <footer style={{
-      backgroundColor: '#0f172a',
-      color: '#ffffff',
-      padding: '3rem 0',
-      marginTop: '4rem'
-    }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 1rem'
-      }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '2rem'
-        }}>
+    <footer className="bg-gray-900 text-white">
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex flex-col items-center space-y-6">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-gradient-to-r from-sauna-600 to-cold-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">SC</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold">Sauna & Cold</span>
+            </div>
+          </Link>
+
+          <p className="text-gray-400 text-sm leading-relaxed text-center max-w-2xl">
+            The UK's premier directory for saunas, cold plunges, ice baths, and wellness facilities.
+            Discover heat and cold therapy options across England, Scotland, and Wales.
+          </p>
+
           <div>
-            <Link href="/" style={{
-              display: 'inline-block',
-              marginBottom: '1rem',
-              textDecoration: 'none'
-            }}>
-              <Image
-                src="/Pilates Classes Near.png"
-                alt="Pilates Classes Near"
-                width={200}
-                height={60}
-                style={{
-                  height: '3rem',
-                  width: 'auto',
-                  filter: 'brightness(0) invert(1)'
-                }}
-                priority
-              />
+            <Link href="/saunas" className="text-gray-400 hover:text-white transition-colors">
+              Saunas
             </Link>
-            <p style={{
-              color: '#ffffff',
-              fontSize: '0.875rem',
-              lineHeight: '1.5'
-            }}>
-              The UK's most trusted directory for finding the best pilates studios and classes near you.
-            </p>
-          </div>
-          <div>
-            <h4 style={{
-              fontWeight: '600',
-              marginBottom: '1rem',
-              fontFamily: 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif',
-              color: '#c4b5fd',
-              fontSize: '1rem'
-            }}>Popular Locations</h4>
-            <ul style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0
-            }}>
-              {counties.slice(0, 6).map((county) => (
-                <li key={county.id} style={{ marginBottom: '0.5rem' }}>
-                  <Link href={`/${county.slug}`} style={{
-                    color: '#94a3b8',
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    transition: 'color 0.2s'
-                  }}
-                  className="footer-link">
-                    Pilates in {county.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 style={{
-              fontWeight: '600',
-              marginBottom: '1rem',
-              fontFamily: 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif',
-              color: '#c4b5fd',
-              fontSize: '1rem'
-            }}>Company</h4>
-            <ul style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0
-            }}>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <a href="mailto:pilatesclassesnear@weltodigital.com" style={{
-                  color: '#94a3b8',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem'
-                }}>Contact</a>
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link href="/privacy-policy" style={{
-                  color: '#94a3b8',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem'
-                }}>Privacy Policy</Link>
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link href="/terms-of-service" style={{
-                  color: '#94a3b8',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem'
-                }}>Terms of Service</Link>
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link href="/sitemap.xml" style={{
-                  color: '#94a3b8',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem'
-                }}>Sitemap</Link>
-              </li>
-            </ul>
           </div>
         </div>
-        <div style={{
-          borderTop: '1px solid #1e293b',
-          marginTop: '2rem',
-          paddingTop: '2rem',
-          textAlign: 'center',
-          fontSize: '0.875rem',
-          color: '#94a3b8'
-        }}>
-          <p>&copy; 2025 Pilates Classes Near. All rights reserved. Find the best pilates studios and classes across the UK.</p>
+
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-sm text-gray-400">
+              <Link href="/privacy-policy" className="hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-of-service" className="hover:text-white transition-colors">
+                Terms of Service
+              </Link>
+              <Link href="/cookie-policy" className="hover:text-white transition-colors">
+                Cookie Policy
+              </Link>
+            </div>
+          </div>
+
+          <div className="text-center mt-6 pt-6 border-t border-gray-800">
+            <p className="text-sm text-gray-400">
+              © {currentYear} Sauna & Cold. All rights reserved.
+              <span className="block md:inline md:ml-2">
+                The UK's most comprehensive wellness facility directory.
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

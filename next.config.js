@@ -1,39 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   experimental: {
-    forceSwcTransforms: false,
-    optimizeCss: false,
-  },
-  // Force fresh deployment - county pages cleanup
-  generateBuildId: () => {
-    return 'pilates-county-cleanup-' + Date.now()
+    appDir: true,
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'zytpgaraxyhlsvvkrrir.supabase.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'maps.googleapis.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh5.googleusercontent.com',
-      },
+    domains: [
+      'images.unsplash.com',
+      'via.placeholder.com',
+      'lh3.googleusercontent.com',
+      'streetviewpixels-pa.googleapis.com',
+      'maps.googleapis.com',
+      'googleusercontent.com',
+      'cdn.worldota.net',
+      'dynamic-media-cdn.tripadvisor.com',
+      'images.trvl-media.com'
     ],
   },
 }
-
-module.exports = nextConfig
