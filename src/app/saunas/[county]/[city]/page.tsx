@@ -394,7 +394,7 @@ export default async function CityLocationPage({ params }: Props) {
                       )}
 
                       <Link
-                        href={`/sauna/${createUniqueSlug(sauna, allSaunas)}`}
+                        href={`/saunas/${params.county}/${params.city}/${sauna.name.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '-')}`}
                         className="bg-gray-900 text-white px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center text-sm"
                       >
                         <ArrowRight size={14} className="mr-2" />
