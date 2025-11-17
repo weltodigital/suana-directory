@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -7,13 +8,14 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col items-center space-y-6">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-sauna-600 to-cold-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">SC</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold">Sauna & Cold</span>
-            </div>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/logo.png"
+              alt="Sauna & Cold Logo"
+              width={80}
+              height={80}
+              className="h-20 w-auto"
+            />
           </Link>
 
           <p className="text-gray-400 text-sm leading-relaxed text-center max-w-2xl">

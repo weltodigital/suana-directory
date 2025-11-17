@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { Thermometer, MapPin, Star, Phone, Globe, ArrowRight, Award, Users } from 'lucide-react'
@@ -321,6 +322,116 @@ export default async function CountySaunasPage({ params }: Props) {
               <div className="text-center">
                 <div className="text-2xl font-bold text-red-600">100%</div>
                 <div className="text-sm text-gray-600">FREE to Use</div>
+              </div>
+            </div>
+
+            {/* Sauna Equipment Section */}
+            <div className="mt-8 text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Shop for Sauna Equipment</h2>
+              <div className="flex justify-center items-center gap-4 overflow-x-auto">
+                {[5, 6, 7, 8, 9, 10].map((num) => (
+                  <div key={num} className="flex-shrink-0">
+                    {num === 5 ? (
+                      <a
+                        href="https://amzn.to/3XlLCFD"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Image
+                          src={`/images/equipment/${num}.png`}
+                          alt={`Sauna equipment ${num}`}
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                        />
+                      </a>
+                    ) : num === 6 ? (
+                      <a
+                        href="https://amzn.to/4pb6haZ"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Image
+                          src={`/images/equipment/${num}.png`}
+                          alt={`Sauna equipment ${num}`}
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                        />
+                      </a>
+                    ) : num === 7 ? (
+                      <a
+                        href="https://amzn.to/4r5XA3E"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Image
+                          src={`/images/equipment/${num}.png`}
+                          alt={`Sauna equipment ${num}`}
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                        />
+                      </a>
+                    ) : num === 8 ? (
+                      <a
+                        href="https://amzn.to/43znnXQ"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Image
+                          src={`/images/equipment/${num}.png`}
+                          alt={`Sauna equipment ${num}`}
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                        />
+                      </a>
+                    ) : num === 9 ? (
+                      <a
+                        href="https://amzn.to/43CJBIB"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Image
+                          src={`/images/equipment/${num}.png`}
+                          alt={`Sauna equipment ${num}`}
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                        />
+                      </a>
+                    ) : num === 10 ? (
+                      <a
+                        href="https://amzn.to/4oTAuMk"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        <Image
+                          src={`/images/equipment/${num}.png`}
+                          alt={`Sauna equipment ${num}`}
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                        />
+                      </a>
+                    ) : (
+                      <Image
+                        src={`/images/equipment/${num}.png`}
+                        alt={`Sauna equipment ${num}`}
+                        width={120}
+                        height={120}
+                        className="rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
