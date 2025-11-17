@@ -30,6 +30,9 @@ export default function Header() {
             <Link href="/saunas" className="text-gray-700 hover:text-sauna-600 font-medium transition-colors">
               Saunas
             </Link>
+            <Link href="/community" className="text-gray-700 hover:text-cold-600 font-medium transition-colors">
+              Community
+            </Link>
           </nav>
 
           <button
@@ -46,6 +49,9 @@ export default function Header() {
             <nav className="flex flex-col space-y-3">
               <Link href="/saunas" className="text-gray-700 hover:text-sauna-600 font-medium py-2 transition-colors">
                 Saunas
+              </Link>
+              <Link href="/community" className="text-gray-700 hover:text-cold-600 font-medium py-2 transition-colors">
+                Community
               </Link>
             </nav>
           </div>
