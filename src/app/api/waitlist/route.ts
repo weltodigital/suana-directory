@@ -2,15 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 // Create Supabase client with service key for server-side operations
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+// Only create client if environment variables are available
+const supabaseAdmin = supabaseUrl && supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false
   }
-})
+}) : null
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,6 +24,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Valid email address is required' },
         { status: 400 }
+      )
+    }
+
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      console.error('Supabase is not properly configured')
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable' },
+        { status: 503 }
       )
     }
 
