@@ -16,7 +16,7 @@ const supabaseAdmin = supabaseUrl && supabaseServiceKey ? createClient(supabaseU
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email } = body
+    const { email, source = 'community_page' } = body
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           email: email.toLowerCase().trim(),
-          source: 'community_page',
+          source: source,
           metadata: {
             user_agent: request.headers.get('user-agent'),
             timestamp: new Date().toISOString()
