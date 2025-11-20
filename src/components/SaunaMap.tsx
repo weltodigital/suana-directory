@@ -26,7 +26,7 @@ const createSaunaIcon = () => {
     className: 'custom-sauna-marker',
     html: `
       <div style="
-        background-color: #ea580c;
+        background-color: #cc8d5f;
         border: 3px solid white;
         border-radius: 50%;
         width: 24px;
@@ -171,7 +171,7 @@ export default function SaunaMap({
                     href={sauna.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-orange-600 text-white px-3 py-1 rounded text-xs hover:bg-orange-700 transition-colors"
+                    className="inline-block bg-sauna-600 text-white px-3 py-1 rounded text-xs hover:bg-sauna-700 transition-colors"
                   >
                     Visit Website
                   </a>

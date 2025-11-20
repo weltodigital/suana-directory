@@ -113,12 +113,12 @@ export default function CommunityPageClient() {
                 </div>
               </form>
             ) : (
-              <div className="max-w-md mx-auto bg-green-50 border border-green-200 rounded-2xl p-6">
+              <div className="max-w-md mx-auto bg-cold-50 border border-cold-200 rounded-2xl p-6">
                 <div className="flex items-center justify-center mb-4">
-                  <CheckCircle className="text-green-600" size={48} />
+                  <CheckCircle className="text-cold-600" size={48} />
                 </div>
-                <h3 className="text-2xl font-bold text-green-800 mb-2">Welcome to the Community!</h3>
-                <p className="text-green-700">We'll notify you as soon as events start in your area.</p>
+                <h3 className="text-2xl font-bold text-cold-800 mb-2">Welcome to the Community!</h3>
+                <p className="text-cold-700">We'll notify you as soon as events start in your area.</p>
               </div>
             )}
           </div>

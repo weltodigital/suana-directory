@@ -259,15 +259,15 @@ export default async function SaunasPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 py-20">
+      <section className="relative bg-gradient-to-br from-sauna-50 via-sauna-100 to-cold-50 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-3xl mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-sauna-500 to-sauna-600 rounded-3xl mb-8">
               <Thermometer className="text-white" size={36} />
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Find UK <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600">Saunas</span> Near You
+              Find UK <span className="text-transparent bg-clip-text bg-gradient-to-r from-sauna-600 to-cold-600">Saunas</span> Near You
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -277,19 +277,19 @@ export default async function SaunasPage() {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-white rounded-2xl shadow-xl p-8 mb-12">
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600">{totalSaunas}</div>
+                <div className="text-3xl font-bold text-sauna-600">{totalSaunas}</div>
                 <div className="text-sm text-gray-600">Total Saunas</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-red-600">250+</div>
+                <div className="text-3xl font-bold text-sauna-600">250+</div>
                 <div className="text-sm text-gray-600">Cities Covered</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600">4.8★</div>
+                <div className="text-3xl font-bold text-sauna-600">4.8★</div>
                 <div className="text-sm text-gray-600">Avg Rating</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-red-600">100%</div>
+                <div className="text-3xl font-bold text-sauna-600">100%</div>
                 <div className="text-sm text-gray-600">FREE to Use</div>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default async function SaunasPage() {
       </section>
 
       {/* Sauna Equipment Section */}
-      <section className="py-16 bg-gradient-to-br from-orange-50 via-red-50 to-pink-50">
+      <section className="py-16 bg-gradient-to-br from-sauna-50 via-sauna-100 to-cold-50">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Shop for Sauna Equipment</h2>
@@ -428,7 +428,7 @@ export default async function SaunasPage() {
             {featuredSaunas.map((sauna) => (
               <div key={sauna.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
                 {sauna.images && sauna.images.length > 0 && (
-                  <div className="h-48 bg-gradient-to-br from-orange-200 to-red-200 relative overflow-hidden">
+                  <div className="h-48 bg-gradient-to-br from-sauna-200 to-sauna-300 relative overflow-hidden">
                     <img
                       src={sauna.images[0]}
                       alt={sauna.name}
@@ -441,7 +441,7 @@ export default async function SaunasPage() {
 
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-sauna-600 transition-colors">
                       {sauna.name}
                     </h3>
                     {sauna.rating && (
@@ -467,7 +467,7 @@ export default async function SaunasPage() {
                         href={sauna.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors font-medium flex items-center justify-center"
+                        className="bg-sauna-600 text-white px-4 py-2 rounded-lg hover:bg-sauna-700 transition-colors font-medium flex items-center justify-center"
                       >
                         <Globe size={16} className="mr-2" />
                         Visit Website
@@ -484,7 +484,7 @@ export default async function SaunasPage() {
 
                     <div className="flex items-center justify-center">
                       {sauna.phone && (
-                        <a href={`tel:${sauna.phone}`} className="text-gray-400 hover:text-orange-600 transition-colors">
+                        <a href={`tel:${sauna.phone}`} className="text-gray-400 hover:text-sauna-600 transition-colors">
                           <Phone size={18} />
                         </a>
                       )}
@@ -511,7 +511,7 @@ export default async function SaunasPage() {
 
           {Object.entries(countiesByCountry).map(([country, counties]) => (
             <div key={country} className="mb-16">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center border-b-2 border-orange-200 pb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center border-b-2 border-sauna-200 pb-4">
                 {country}
               </h3>
 
@@ -523,17 +523,17 @@ export default async function SaunasPage() {
                     className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group border border-gray-100"
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                      <h4 className="text-lg font-bold text-gray-900 group-hover:text-sauna-600 transition-colors">
                         {county.county}
                       </h4>
-                      <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold">
+                      <span className="bg-sauna-100 text-sauna-600 px-3 py-1 rounded-full text-sm font-semibold">
                         {county.totalSaunas} {county.totalSaunas === 1 ? 'sauna' : 'saunas'}
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm mb-4">
                       {county.cityCount} {county.cityCount === 1 ? 'city' : 'cities'}
                     </p>
-                    <div className="flex items-center text-orange-600 font-semibold">
+                    <div className="flex items-center text-sauna-600 font-semibold">
                       <span>Explore county</span>
                       <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -559,8 +559,8 @@ export default async function SaunasPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-gradient-to-br from-sauna-50 to-sauna-100 rounded-2xl p-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-sauna-500 to-sauna-600 rounded-2xl flex items-center justify-center mb-6">
                 <Thermometer className="text-white" size={28} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Finnish Saunas</h3>
@@ -575,8 +575,8 @@ export default async function SaunasPage() {
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8">
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-gradient-to-br from-sauna-50 to-sauna-100 rounded-2xl p-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-sauna-500 to-sauna-600 rounded-2xl flex items-center justify-center mb-6">
                 <Thermometer className="text-white" size={28} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Infrared Saunas</h3>
@@ -591,8 +591,8 @@ export default async function SaunasPage() {
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6">
+            <div className="bg-gradient-to-br from-cold-50 to-cold-100 rounded-2xl p-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-cold-500 to-cold-600 rounded-2xl flex items-center justify-center mb-6">
                 <Thermometer className="text-white" size={28} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Steam Rooms</h3>
@@ -611,7 +611,7 @@ export default async function SaunasPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gradient-to-br from-orange-600 to-red-600">
+      <section className="py-20 bg-gradient-to-br from-sauna-600 to-sauna-700">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -670,13 +670,13 @@ export default async function SaunasPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="#counties"
-              className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-8 py-4 rounded-xl hover:from-orange-700 hover:to-red-700 transition-all duration-300 font-semibold text-lg"
+              className="bg-gradient-to-r from-sauna-600 to-sauna-700 text-white px-8 py-4 rounded-xl hover:from-sauna-700 hover:to-sauna-800 transition-all duration-300 font-semibold text-lg"
             >
               Browse by County
             </Link>
             <Link
               href="/add-sauna"
-              className="border-2 border-orange-600 text-orange-600 px-8 py-4 rounded-xl hover:bg-orange-600 hover:text-white transition-all duration-300 font-semibold text-lg"
+              className="border-2 border-sauna-600 text-sauna-600 px-8 py-4 rounded-xl hover:bg-sauna-600 hover:text-white transition-all duration-300 font-semibold text-lg"
             >
               List Your Sauna
             </Link>
