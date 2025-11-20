@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Mail, Thermometer, Snowflake } from 'lucide-react'
+import { X, Mail } from 'lucide-react'
+import Image from 'next/image'
 
 interface EmailPopupProps {
   isOpen: boolean
@@ -74,14 +75,14 @@ export default function EmailPopup({ isOpen, onClose, onSubmit }: EmailPopupProp
         {/* Header */}
         <div className="bg-gradient-to-r from-sauna-500 to-cold-500 p-6 text-white">
           <div className="flex items-center justify-center mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                <Thermometer size={20} />
-              </div>
-              <div className="text-2xl font-bold text-white/40">+</div>
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                <Snowflake size={20} />
-              </div>
+            <div className="w-16 h-16 bg-white/10 rounded-2xl p-2 flex items-center justify-center">
+              <Image
+                src="/images/logo.png"
+                alt="Sauna & Cold"
+                width={48}
+                height={48}
+                className="w-12 h-12 object-contain"
+              />
             </div>
           </div>
           <h2 className="text-2xl font-bold text-center mb-2">
