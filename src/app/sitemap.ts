@@ -147,6 +147,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   try {
+    // Check if Supabase is available
+    if (!supabase) {
+      console.warn('Supabase not configured, returning static pages only')
+      return staticPages
+    }
+
     // Get all saunas for individual sauna pages
     const { data: allSaunas } = await supabase
       .from('facilities')
