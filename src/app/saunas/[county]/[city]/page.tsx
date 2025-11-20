@@ -143,6 +143,11 @@ const countyMapping: { [key: string]: string[] } = {
 
 async function getLocationData(countySlug: string, citySlug: string) {
   try {
+    if (!supabase) {
+      console.error('Supabase client not available')
+      return null
+    }
+
     // Get all saunas
     const { data: allSaunas, error } = await supabase
       .from('facilities')

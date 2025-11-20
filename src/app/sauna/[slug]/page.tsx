@@ -108,6 +108,11 @@ function getCountySlug(sauna: any): string {
 
 async function findSaunaBySlug(slug: string) {
   try {
+    // Check if Supabase is available
+    if (!supabase) {
+      return null
+    }
+
     // Get all saunas
     const { data: allSaunas, error } = await supabase
       .from('facilities')

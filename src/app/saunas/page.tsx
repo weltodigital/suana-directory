@@ -201,6 +201,16 @@ function getCountySlug(sauna: any): string {
 
 async function getSaunaData() {
   try {
+    if (!supabase) {
+      console.error('Supabase client not available')
+      return {
+        totalSaunas: 626,
+        featuredSaunas: [],
+        allSaunas: [],
+        countiesByCountry
+      }
+    }
+
     // Get total sauna count
     const { count: totalSaunas } = await supabase
       .from('facilities')

@@ -94,6 +94,11 @@ function createUniqueSlug(sauna: any, allSaunas: any[]): string {
 
 async function getSaunaData(countySlug: string, citySlug: string, saunanameSlug: string): Promise<Sauna | null> {
   try {
+    if (!supabase) {
+      console.error('Supabase client not available')
+      return null
+    }
+
     // Get all saunas to handle duplicates properly
     const { data: allSaunas, error } = await supabase
       .from('facilities')
@@ -230,6 +235,11 @@ async function getSaunaData(countySlug: string, citySlug: string, saunanameSlug:
 
 async function getNearbySaunas(county: string, city: string, currentId: string) {
   try {
+    if (!supabase) {
+      console.error('Supabase client not available')
+      return []
+    }
+
     const { data: saunas, error } = await supabase
       .from('facilities')
       .select('*')
@@ -310,10 +320,12 @@ export default async function SaunaPage({ params }: Props) {
   const nearbySaunas = await getNearbySaunas(sauna.county, sauna.city, sauna.id)
 
   // Get all saunas for unique slug generation
-  const { data: allSaunas } = await supabase
-    .from('facilities')
-    .select('*')
-    .eq('facility_type', 'sauna')
+  const { data: allSaunas } = supabase
+    ? await supabase
+        .from('facilities')
+        .select('*')
+        .eq('facility_type', 'sauna')
+    : { data: null }
 
   // Use the URL params directly since they're already the proper slugs
   const countySlug = params.county
