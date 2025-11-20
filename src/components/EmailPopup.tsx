@@ -85,10 +85,10 @@ export default function EmailPopup({ isOpen, onClose, onSubmit }: EmailPopupProp
             </div>
           </div>
           <h2 className="text-2xl font-bold text-center mb-2">
-            Join the Sauna & Cold Community
+            Join the Waitlist
           </h2>
           <p className="text-center text-white/90 text-sm">
-            Get exclusive updates on the best saunas and cold plunge spots in the UK
+            Be the first to know when we launch our first sauna & cold plunge event
           </p>
         </div>
 
@@ -122,7 +122,7 @@ export default function EmailPopup({ isOpen, onClose, onSubmit }: EmailPopupProp
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  'Join Waitlist'
+                  'Join Event Waitlist'
                 )}
               </button>
 
@@ -139,8 +139,8 @@ export default function EmailPopup({ isOpen, onClose, onSubmit }: EmailPopupProp
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Welcome to the Community!</h3>
-              <p className="text-gray-600">We'll keep you updated on the best wellness spots near you.</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">You're on the List!</h3>
+              <p className="text-gray-600">We'll notify you as soon as our first event launches in your area.</p>
             </div>
           )}
         </div>
