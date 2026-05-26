@@ -13,6 +13,7 @@ import {
   Mail,
   Award,
   ArrowLeft,
+  ArrowRight,
   Navigation,
   Users,
   Wifi,
@@ -793,6 +794,34 @@ export default async function SaunaPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* Grow Our Reviews CTA */}
+      <section className="py-16 bg-gradient-to-br from-sauna-50 via-white to-cold-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8 md:p-10 border border-sauna-100">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r from-cold-500 to-cold-600 rounded-2xl mb-5">
+                <Star className="text-white" size={24} fill="currentColor" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                Own a sauna in {sauna.city}? Grow your sauna business with more 5-star reviews
+              </h2>
+              <p className="text-gray-600 text-base md:text-lg mb-6 leading-relaxed">
+                More reviews mean more bookings. Grow Our Reviews helps sauna businesses like yours collect more genuine 5-star Google reviews on autopilot — so new clients find you first.
+              </p>
+              <a
+                href="https://growourreviews.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-cold-500 hover:bg-cold-600 text-white px-8 py-3 rounded-xl transition-all duration-300 font-semibold"
+              >
+                Learn More
+                <ArrowRight size={18} className="ml-2" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-orange-600 to-red-600">
